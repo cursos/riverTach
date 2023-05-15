@@ -6,6 +6,54 @@ import 'package:riverpod_app/providers/counter_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_app/services/api_service.dart';
 
+final streamProvider = StreamProvider<int>((ref) {
+  return Stream.periodic(
+      const Duration(seconds: 2), (((computationCount) => computationCount)));
+});
+void main() => runApp(const ProviderScope(child: MyApp()));
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Material App',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Stream Provider'),
+        ),
+        body: const HomePage(),
+      ),
+    );
+  }
+}
+
+class HomePage extends ConsumerWidget {
+  const HomePage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final streamData = ref.watch(streamProvider);
+    return Center(
+      child: streamData.when(
+        data: (value) {
+          return Text("Value is: $value");
+        },
+        error: (error, stackTrace) => Text(error.toString()),
+        loading: () => const Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    );
+  }
+}
+
+//futurePod
+
+/* 
 final apiProvider = Provider<ApiService>(
   (ref) {
     return ApiService();
@@ -68,7 +116,7 @@ class HomePage extends ConsumerWidget {
           loading: () => const CircularProgressIndicator()),
     );
   }
-}
+} */
 
 /// riverpod using stateNotifier
 /* 
