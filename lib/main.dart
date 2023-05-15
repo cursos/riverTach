@@ -1,12 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:riverpod_app/models/user_model.dart';
+import 'package:riverpod_app/pages/counter_page.dart';
+import 'package:riverpod_app/pages/home_page.dart';
 import 'package:riverpod_app/providers/counter_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:riverpod_app/services/api_service.dart';
 
-final streamProvider = StreamProvider<int>((ref) {
+void main() => runApp(const ProviderScope(child: MyApp()));
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      title: 'Material App',
+      routerConfig: _router,
+    );
+  }
+}
+
+final GoRouter _router = GoRouter(routes: [
+  GoRoute(path: "/", builder: (context, state) => const HomePage()),
+  GoRoute(path: "/counter", builder: (context, state) => const CounterPage()),
+]);
+
+
+///StreamPod
+/* final streamProvider = StreamProvider<int>((ref) {
   return Stream.periodic(
       const Duration(seconds: 2), (((computationCount) => computationCount)));
 });
@@ -50,9 +74,9 @@ class HomePage extends ConsumerWidget {
     );
   }
 }
+ */
 
 //futurePod
-
 /* 
 final apiProvider = Provider<ApiService>(
   (ref) {
